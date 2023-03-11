@@ -79,7 +79,7 @@ steps:
       ls _dist
   displayName: 'Build-cross'
 
-- template: esrp-sign.yml
+- template: sign-svc.yml
   parameters:
     folderPath: "$(System.DefaultWorkingDirectory)/_dist"
     isInstallDotNet: true
@@ -93,7 +93,7 @@ steps:
       cp -rf $(System.DefaultWorkingDirectory)/_dist/* $(System.DefaultWorkingDirectory)/_sign
   displayName: 'Copy files for linux signing'
 
-- template: esrp-sign.yml
+- template: sign-svc.yml
   parameters:
     folderPath: "$(System.DefaultWorkingDirectory)/_sign"
     isInstallDotNet: false
@@ -145,7 +145,7 @@ steps:
       cp -rf $(System.DefaultWorkingDirectory)/_dist/*.tar.gz $(System.DefaultWorkingDirectory)/_sign2
   displayName: 'Copy files for linux signing'
 
-- template: esrp-sign.yml
+- template: sign-svc.yml
   parameters:
     folderPath: "$(System.DefaultWorkingDirectory)/_sign2"
     isInstallDotNet: false
