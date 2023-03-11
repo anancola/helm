@@ -1,0 +1,38 @@
+parameters:
+  - name: "folderPath"
+    type: string
+    default: $(Build.ArtifactStagingDirectory)/package
+  - name: "isInstallDotNet"
+    type: boolean
+    default: true
+  - name: "isWindowsSign"
+    type: boolean
+    default: false
+  - name: "windowsFilePattern"
+    type: string
+    default: "*.exe"
+  - name: "isLinuxSign"
+    type: boolean
+    default: false
+  - name: "linuxFilePattern"
+    type: string
+    default: "helm"
+
+steps:
+  - ? ${{ if eq(parameters.isInstallDotNet, true) }}
+    : - task: UseDotNet@2
+        displayName: '✔ Use .NET Core sdk'
+        inputs:
+          packageType: sdk
+          version: 2.1.x
+          installationPath: $(Agent.ToolsDirectory)/dotnet
+  - ? ${{ if eq(parameters.isWindowsSign, true) }}
+    : - task: SFP.build-tasks.custom-build-task-1.CodeSigning@1
+        displayName: "✔ ESRP CodeSigning (windows)"
+        inputs:
+          ConnectedServiceName: "Your_ConnectedServiceName"
+          FolderPath: "${{ parameters.folderPath }}"
+          Pattern: "${{ parameters.windowsFilePattern }}"
+          signConfigType: inlineSignParams
+          inlineOperation: |
+            []
